@@ -29,6 +29,7 @@ export class UserController {
     @UseGuards(JwtAuthGuard,RolesGuard)
     @Roles('admin')
     @Get('admin/data')
+    @ApiBearerAuth()
     @ApiOperation({ summary: 'Get all users (Admin only)' })
     @ApiResponse({ status: 200, description: 'List of users' })
     @ApiForbiddenResponse({ description: 'Forbidden: Admins only' })
@@ -42,6 +43,7 @@ export class UserController {
     @UseGuards(JwtAuthGuard,RolesGuard)
     @Roles('admin')
     @Get('admin/user-details/:id')
+    @ApiBearerAuth()
     @ApiOperation({ summary: 'Get user details by ID (Admin only)' })
     @ApiParam({ name: 'id', description: 'User ID' })
     @ApiResponse({ status: 200, description: 'User details' })
@@ -57,6 +59,7 @@ export class UserController {
     //only admin and user himself can see his profile info.
     @UseGuards(JwtAuthGuard)//this will decrypt the jwt token and we will get those data in req obj.
     @Get('user/profile')
+    @ApiBearerAuth()
     @ApiOperation({ summary: 'Get own user profile' })
     @ApiResponse({ status: 200, description: 'User profile data' })
     @ApiUnauthorizedResponse({ description: 'Unauthorized or invalid token' })
