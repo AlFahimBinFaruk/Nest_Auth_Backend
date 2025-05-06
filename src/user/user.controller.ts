@@ -5,6 +5,18 @@ import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { Request } from '@nestjs/common';
 
+import {
+  ApiTags,
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiUnauthorizedResponse,
+  ApiForbiddenResponse,
+} from '@nestjs/swagger';
+
+
+  
 @Controller()
 export class UserController {
     constructor(
@@ -17,14 +29,23 @@ export class UserController {
     @UseGuards(JwtAuthGuard,RolesGuard)
     @Roles('admin')
     @Get('admin/data')
+    @ApiOperation({ summary: 'Get all users (Admin only)' })
+    @ApiResponse({ status: 200, description: 'List of users' })
+    @ApiForbiddenResponse({ description: 'Forbidden: Admins only' })
     getAllUserList(){
         return this.userService.findAll();
     }
+
+
 
     //only admin can access user details
     @UseGuards(JwtAuthGuard,RolesGuard)
     @Roles('admin')
     @Get('admin/user-details/:id')
+    @ApiOperation({ summary: 'Get user details by ID (Admin only)' })
+    @ApiParam({ name: 'id', description: 'User ID' })
+    @ApiResponse({ status: 200, description: 'User details' })
+    @ApiForbiddenResponse({ description: 'Forbidden: Admins only' })
     async getUserDetails(@Param('id') id:string){
         const userDetails=await this.userService.findById(id);
         if(!userDetails){
@@ -36,6 +57,9 @@ export class UserController {
     //only admin and user himself can see his profile info.
     @UseGuards(JwtAuthGuard)//this will decrypt the jwt token and we will get those data in req obj.
     @Get('user/profile')
+    @ApiOperation({ summary: 'Get own user profile' })
+    @ApiResponse({ status: 200, description: 'User profile data' })
+    @ApiUnauthorizedResponse({ description: 'Unauthorized or invalid token' })
     async getUserProfile(@Req() req:Request){
         const {user} =req as any;
         const userId=user.user;
