@@ -6,7 +6,6 @@ import { Roles } from 'src/auth/roles.decorator';
 import { Request } from '@nestjs/common';
 
 import {
-  ApiTags,
   ApiBearerAuth,
   ApiOperation,
   ApiResponse,
