@@ -5,6 +5,7 @@ version: '3.8'
 services:
   app:
     build: .
+    image: nest-auth-backend:latest
     container_name: nestjs-app
     ports:
       - '3000:3000'

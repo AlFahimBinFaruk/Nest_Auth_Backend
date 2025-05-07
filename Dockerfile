@@ -3,7 +3,7 @@
 
 # This sets the base image.
 # This image includes Node.js and npm, so we don’t need to install them manually
-FROM node:22
+FROM node:22-slim
 
 
 # Thats where my app will live in docker container.
