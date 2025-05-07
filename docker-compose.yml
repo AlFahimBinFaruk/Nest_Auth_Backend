@@ -1,21 +1,27 @@
+# Spedifies the docker-composer file format version
 version: '3.8'
 
+# All the containers i want to run.
 services:
   app:
     build: .
     container_name: nestjs-app
     ports:
       - '3000:3000'
+    # Ensures the postgres container starts first, before the app
     depends_on:
       - postgres
     environment:
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: 5432
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: myapp
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    # Mounts your local project folder(.) into the container at /app, so i dont have to build image everytime code changes.
     volumes:
       - .:/app
+    # Overrides the CMD from the Dockerfile.
+    # Runs the NestJS app in watch mode
     command: npm run start:dev
 
   postgres:
@@ -24,11 +30,13 @@ services:
     ports:
       - '5432:5432'
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: myapp
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    # Mounts a named volume called pgdata to persist database files,to ensure data is saved even when container restarts.
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+# Declares the pgdata volume so Docker Compose knows to create and manage it.
 volumes:
   pgdata:
