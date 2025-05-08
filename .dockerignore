@@ -10,7 +10,7 @@ test/
 # Ignore sensitive environment files
 .env
 
-# Ignore Dockerfile itself (if you don’t want it in the image)
+# Ignore Dockerfile itself
 Dockerfile
 
 # Ignore hidden files and directories (e.g., .git)
